@@ -1,37 +1,27 @@
-const path = require("path");
+//const webpack = require("webpack");
 const _ = require("lodash");
-const fs = require("fs");
-const webpackLodashPlugin = require("lodash-webpack-plugin");
-const siteConfig = require("./data/SiteConfig");
-const {
-  createPaginationPages,
-  createLinkedPages
-} = require("gatsby-pagination");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const path = require("path");
+const Promise = require("bluebird");
 
-exports.onCreateNode = ({ node, boundActionCreators, getNode }) => {
+const { createFilePath } = require(`gatsby-source-filesystem`);
+
+exports.onCreateNode = ({ node, getNode, boundActionCreators }) => {
   const { createNodeField } = boundActionCreators;
-  let slug;
-  if (node.internal.type === "MarkdownRemark") {
-    const fileNode = getNode(node.parent);
-    const parsedFilePath = path.parse(fileNode.relativePath);
-    if (
-      Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
-      Object.prototype.hasOwnProperty.call(node.frontmatter, "slug")
-    ) {
-      slug = `/${_.kebabCase(node.frontmatter.slug)}`;
-    } else if (
-      Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
-      Object.prototype.hasOwnProperty.call(node.frontmatter, "title")
-    ) {
-      slug = `/${_.kebabCase(node.frontmatter.title)}`;
-    } else if (parsedFilePath.name !== "index" && parsedFilePath.dir !== "") {
-      slug = `/${parsedFilePath.dir}/${parsedFilePath.name}/`;
-    } else if (parsedFilePath.dir === "") {
-      slug = `/${parsedFilePath.name}/`;
-    } else {
-      slug = `/${parsedFilePath.dir}/`;
-    }
-    createNodeField({ node, name: "slug", value: slug });
+  if (node.internal.type === `MarkdownRemark`) {
+    const slug = createFilePath({ node, getNode, basePath: `pages` });
+    const separtorIndex = ~slug.indexOf("--") ? slug.indexOf("--") : 0;
+    const shortSlugStart = separtorIndex ? separtorIndex + 2 : 0;
+    createNodeField({
+      node,
+      name: `slug`,
+      value: `${separtorIndex ? "/" : ""}${slug.substring(shortSlugStart)}`
+    });
+    createNodeField({
+      node,
+      name: `prefix`,
+      value: separtorIndex ? slug.substring(1, separtorIndex) : ""
+    });
   }
 };
 
@@ -39,46 +29,29 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
   const { createPage } = boundActionCreators;
 
   return new Promise((resolve, reject) => {
-    const indexPage = path.resolve("src/templates/index.jsx");
-    const postPage = path.resolve("src/templates/post.jsx");
-    const tagPage = path.resolve("src/templates/tag.jsx");
-    const categoryPage = path.resolve("src/templates/category.jsx");
-    const authorPage = path.resolve("src/templates/author.jsx");
-
-    if (
-      !fs.existsSync(
-        path.resolve(`content/${siteConfig.blogAuthorDir}/authors/`)
-      )
-    ) {
-      reject(
-        "The 'authors' folder is missing within the 'blogAuthorDir' folder."
-      );
-    }
-
+    const postTemplate = path.resolve("./src/templates/PostTemplate.js");
+    const pageTemplate = path.resolve("./src/templates/PageTemplate.js");
+    const categoryTemplate = path.resolve("./src/templates/CategoryTemplate.js");
     resolve(
       graphql(
         `
           {
             allMarkdownRemark(
+              filter: { id: { regex: "//posts|pages//" } }
+              sort: { fields: [fields___prefix], order: DESC }
               limit: 1000
-              sort: { fields: [frontmatter___date], order: DESC }
             ) {
-              totalCount
               edges {
                 node {
-                  frontmatter {
-                    title
-                    tags
-                    cover
-                    date
-                    category
-                    author
-                  }
+                  id
                   fields {
                     slug
+                    prefix
                   }
-                  excerpt
-                  timeToRead
+                  frontmatter {
+                    title
+                    categories
+                  }
                 }
               }
             }
@@ -86,94 +59,69 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
         `
       ).then(result => {
         if (result.errors) {
-          /* eslint no-console: "off" */
           console.log(result.errors);
           reject(result.errors);
         }
 
-        // Creates Index page
-        createPaginationPages({
-          createPage,
-          edges: result.data.allMarkdownRemark.edges,
-          component: indexPage,
-          limit: siteConfig.sitePaginationLimit
-        });
+        const items = result.data.allMarkdownRemark.edges;
 
-        // Creates Posts
-        createLinkedPages({
-          createPage,
-          edges: result.data.allMarkdownRemark.edges,
-          component: postPage,
-          edgeParser: edge => ({
-            path: edge.node.fields.slug,
-            context: {
-              slug: edge.node.fields.slug
-            }
-          }),
-          circular: true
-        });
-
-        const tagSet = new Set();
-        const tagMap = new Map();
+        // Create category list
         const categorySet = new Set();
-        const authorSet = new Set();
-        authorSet.add(siteConfig.blogAuthorId);
+        items.forEach(edge => {
+          const {
+            node: {
+              frontmatter: { categories }
+            }
+          } = edge;
 
-        result.data.allMarkdownRemark.edges.forEach(edge => {
-          if (edge.node.frontmatter.tags) {
-            edge.node.frontmatter.tags.forEach(tag => {
-              tagSet.add(tag);
-
-              const array = tagMap.has(tag) ? tagMap.get(tag) : [];
-              array.push(edge);
-              tagMap.set(tag, array);
+          if (categories && categories !== null) {
+            categories.forEach(category => {
+              categorySet.add(category);
             });
           }
-
-          if (edge.node.frontmatter.category) {
-            categorySet.add(edge.node.frontmatter.category);
-          }
-
-          if (edge.node.frontmatter.author) {
-            authorSet.add(edge.node.frontmatter.author);
-          }
         });
 
-        const tagFormatter = tag => route =>
-          `/tags/${_.kebabCase(tag)}/${route !== 1 ? route : ""}`;
-        const tagList = Array.from(tagSet);
-        tagList.forEach(tag => {
-          // Creates tag pages
-          createPaginationPages({
-            createPage,
-            edges: tagMap.get(tag),
-            component: tagPage,
-            pathFormatter: tagFormatter(tag),
-            limit: siteConfig.sitePaginationLimit,
-            context: {
-              tag
-            }
-          });
-        });
-
+        // Create category pages
         const categoryList = Array.from(categorySet);
+
         categoryList.forEach(category => {
           createPage({
-            path: `/categories/${_.kebabCase(category)}/`,
-            component: categoryPage,
+            path: `/category/${_.kebabCase(category.replace(":", ""))}/`,
+            component: categoryTemplate,
             context: {
               category
             }
           });
         });
 
-        const authorList = Array.from(authorSet);
-        authorList.forEach(author => {
+        // Create posts
+        const posts = items.filter(item => /posts/.test(item.node.id));
+        posts.forEach(({ node }, index) => {
+          const slug = node.fields.slug;
+          const next = index === 0 ? undefined : posts[index - 1].node;
+          const prev = index === posts.length - 1 ? undefined : posts[index + 1].node;
+
           createPage({
-            path: `/author/${_.kebabCase(author)}/`,
-            component: authorPage,
+            path: slug,
+            component: postTemplate,
             context: {
-              author
+              slug,
+              prev,
+              next
+            }
+          });
+        });
+
+        // and pages.
+        const pages = items.filter(item => /pages/.test(item.node.id));
+        pages.forEach(({ node }) => {
+          const slug = node.fields.slug;
+
+          createPage({
+            path: slug,
+            component: pageTemplate,
+            context: {
+              slug
             }
           });
         });
@@ -183,7 +131,97 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
 };
 
 exports.modifyWebpackConfig = ({ config, stage }) => {
-  if (stage === "build-javascript") {
-    config.plugin("Lodash", webpackLodashPlugin, null);
+  switch (stage) {
+    case "build-javascript":
+      {
+        // let components = store.getState().pages.map(page => page.componentChunkName);
+        // components = _.uniq(components);
+        // config.plugin("CommonsChunkPlugin", webpack.optimize.CommonsChunkPlugin, [
+        //   {
+        //     name: `commons`,
+        //     chunks: [`app`, ...components],
+        //     minChunks: (module, count) => {
+        //       const vendorModuleList = []; // [`material-ui`, `lodash`];
+        //       const isFramework = _.some(
+        //         vendorModuleList.map(vendor => {
+        //           const regex = new RegExp(`[\\\\/]node_modules[\\\\/]${vendor}[\\\\/].*`, `i`);
+        //           return regex.test(module.resource);
+        //         })
+        //       );
+        //       return isFramework || count > 1;
+        //     }
+        //   }
+        // ]);
+
+        config.plugin("BundleAnalyzerPlugin", BundleAnalyzerPlugin, [
+          {
+            analyzerMode: "static",
+            reportFilename: "./report/treemap.html",
+            openAnalyzer: true,
+            logLevel: "error",
+            defaultSizes: "gzip"
+          }
+        ]);
+
+        config.loader("yaml-loader", {
+          test: /\.yaml$/,
+          include: path.resolve("data"),
+          loader: "yaml"
+        });
+      }
+      break;
   }
+
+  return config;
+};
+
+exports.modifyBabelrc = ({ babelrc }) => {
+  return {
+    ...babelrc,
+    plugins: babelrc.plugins.concat([
+      [
+        "styled-jsx/babel",
+        {
+          plugins: [
+            "styled-jsx-plugin-postcss",
+            [
+              "styled-jsx-plugin-stylelint",
+              {
+                stylelint: {
+                  rules: {
+                    "block-no-empty": true,
+                    "color-no-invalid-hex": true,
+                    "unit-no-unknown": true,
+                    "property-no-unknown": true,
+                    "declaration-block-no-shorthand-property-overrides": true,
+                    "selector-pseudo-element-no-unknown": true,
+                    "selector-type-no-unknown": true,
+                    "media-feature-name-no-unknown": true,
+                    "no-empty-source": true,
+                    "no-extra-semicolons": true,
+                    "function-url-no-scheme-relative": true,
+                    "declaration-no-important": true,
+                    "selector-pseudo-class-no-unknown": [true, { ignorePseudoClasses: ["global"] }],
+                    "shorthand-property-no-redundant-values": true,
+                    "no-duplicate-selectors": null,
+                    "declaration-block-no-duplicate-properties": null,
+                    "no-descending-specificity": null
+                  }
+                }
+              }
+            ]
+          ]
+        }
+      ],
+      [
+        "import",
+        {
+          libraryName: "antd",
+          style: "css"
+        }
+      ],
+      `syntax-dynamic-import`,
+      `dynamic-import-webpack`
+    ])
+  };
 };

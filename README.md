@@ -1,188 +1,131 @@
-<div align="center">
-    <img src="static/logos/logo-1024.png" alt="Logo" width='200px' height='200px'/>
-</div>
+# HeroBlog
 
-# Gatsby Casper Starter
-[![Code Climate](https://codeclimate.com/github/haysclark/gatsby-starter-casper/badges/gpa.svg)](https://codeclimate.com/github/haysclark/gatsby-starter-casper)
-[![Issue Count](https://codeclimate.com/github/haysclark/gatsby-starter-casper/badges/issue_count.svg)](https://codeclimate.com/github/haysclark/gatsby-starter-casper)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+A [GatsbyJS](https://www.gatsbyjs.org/) blog starter. <br /><br />
 
-A blog starter for [Gatsby](https://github.com/gatsbyjs/gatsby/), utilizing the popular [Casper (v1.4)](https://github.com/TryGhost/Casper/tree/1.4) theme authored by [Ghost.io](https://ghost.io/).  The project is based on [Gatsby Advanced Starter](https://github.com/Vagr9K/gatsby-advanced-starter) and has a lot on common with the [Gatsby Material Starter](https://github.com/Vagr9K/gatsby-material-starter), but will evolve separately. In this project the single Casper CSS file has been carefully extracted into individual components with only minor tweaks.
+[![GitHub tag](https://img.shields.io/github/tag/greglobinski/gatsby-starter-hero-blog.svg)](https://github.com/greglobinski/gatsby-starter-personal-blog)
+[![GitHub stars](https://img.shields.io/github/stars/greglobinski/gatsby-starter-hero-blog.svg)](https://github.com/greglobinski/gatsby-starter-personal-blog/stargazers)
+[![GitHub license](https://img.shields.io/github/license/greglobinski/gatsby-starter-hero-blog.svg)](https://github.com/greglobinski/gatsby-starter-personal-blog/blob/master/LICENSE)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+![GitHub contributors](https://img.shields.io/github/contributors/greglobinski/gatsby-starter-hero-blog.svg)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/greglobinski/gatsby-starter-hero-blog.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fgreglobinski%2Fgatsby-starter-hero-blog)
 
-This starter also serves as example for the [Gatsby-Pagination](https://github.com/infinitedescent/gatsby-pagination) library.
+  <br />
 
-[Demo website.](https://haysclark.github.io/gatsby-starter-casper/)
+![](static/screens/gatsby-starter-hero-blog.gif) <br />
 
-![Screenshot](docs/screenshot.png)
+  <br />
 
-## GatsbyJS V1
+See the starter in action » [demo website](https://gatsby-starter-hero-blog.greglobinski.com/) <br />For more information visit » [dev.greglobinski.com/gatsby-starter-hero-blog](https://dev.greglobinski.com/gatsby-starter-hero-blog/)
 
-This starter is based on GatsbyJS V1, which brings progressive web app features such as automatic code and data splitting (by route), prefetching, with service worker/offline-first support and PRPL pattern.
+## Description
 
-More information in the [announcement](https://www.gatsbyjs.org/blog/gatsby-first-beta-release/).
+A ready to use, easy to customize 'like theme' starter with a 'Hero' section on the home page.
 
-## Features
+## Features:
 
-* Blazing fast loading times thanks to pre-rendered HTML and automatic chunk loading of JS files
-* Separate components for everything
-* High configurability:
-  * Site information
-  * Site social profiles
-  * Copyright information
-  * More!
-* Author segment
-  * Name
-  * Location
-  * Description
-  * Links
-  * Follow Me button
-  * Social profiles
-* Posts in Markdown
-  * Code syntax highlighting
-  * Embed YouTube videos
-  * Embed Tweets
-  * Pages support pagination
-  * Read More linked paginated pages  
-* Tags
-  * Separate page for posts under each tag
-  * Pages support pagination.
-* Categories (pages generated but not linked in theme)
-  * Separate page for posts under each category
-* Disqus support (needs to be uncommented)
-  * Notifications about new disqus comments
-* Google Analytics support
-* NPM scripts for GitHub Pages deployment
-* Social features (uncomment code to use)
-  * Twitter tweet button
-  * Facebook share/share count
-  * Google+ share button
-  * easily to add more!
-* SEO
-  * Sitemap generation
-  * robots.txt
-  * General description tags
-  * Schema.org JSONLD (Google Rich Snippets)
-  * OpenGraph Tags (Facebook/Google+/Pinterest)
-  * Twitter Tags (Twitter Cards)
-* RSS feeds
-* Loading progress for slow networks
-* Offline support
-* Web App Manifest support
-* Development tools
-  * ESLint for linting
-  * Prettier for code style
-  * Remark-Lint for linting Markdown
-  * write-good for linting English prose
-  * gh-pages for deploying to GitHub pages
-  * CodeClimate configuration file and badge
+* Easy editable content in **Markdown** files (posts, pages and parts)
+* **CSS** with `styled-jsx` and `PostCSS`
+* **SEO** (sitemap generation, robot.txt, meta and OpenGraph Tags)
+* **Social** sharing (Twitter, Facebook, Google, LinkedIn)
+* **Comments** (Facebook)
+* **Images** lazy loading and `webp` support (gatsby-image)
+* Post **categories** (category based post list)
+* Full text **searching** (Algolia)
+* **Contact** form (Netlify form handling)
+* Form elements and validation with `ant-design`
+* **RSS** feed
+* 100% **PWA** (manifest.webmanifest, offline support, favicons)
+* Google **Analytics**
+* App **favicons** generator (node script)
+* Easy customizable base **styles** via `theme` object generated from `yaml` file (fonts, colors, sizes)
+* React **v.16.3** (gatsby-plugin-react-next)
+* **Components** lazy loading (social sharing)
+* **ESLint** (google config)
+* **Prettier** code styling
+* Webpack `BundleAnalyzerPlugin`
 
-NOTE: Feel free to check out [Gatsby Material Starter](https://github.com/Vagr9K/gatsby-material-starter) if you are interested in a more opinionated starter with Material Design in mind.
+## Prerequisites
 
-## Getting Started
+If you do not have Gatsby Cli installed yet, do it first.
 
-Install this starter (assuming [Gatsby](https://github.com/gatsbyjs/gatsby/) is installed) by running from your CLI:
+```text
+npm install --global gatsby-cli
+```
 
-```sh
-gatsby new YourProjectName https://github.com/haysclark/gatsby-starter-casper
+More information on [GatsbyJS.org](https://www.gatsbyjs.org/tutorial/part-one)
+
+## Getting started
+
+Install the starter using Gatsby Cli `gatsby new` command.
+
+```text
+gatsby new [NEW_SITE_DIRECTORY_FOR_YOUR_BLOG] https://github.com/greglobinski/gatsby-starter-hero-blog.git
+```
+
+Go into the newly created directory and run
+
+```text
 gatsby develop
 ```
 
-Alternatively, you can clone the repo or a fork of the repo and install it manually.
+to hot-serve your website on http://localhost:8000 or
 
-```sh
-git clone https://github.com/haysclark/gatsby-starter-casper YourProjectName # Clone the project
-cd YourProjectname
-rm -rf .git # Optional, you can leave the .git history for future rebasing
-npm install # or yarn install
-npm run develop # or gatsby develop
+```text
+gatsby build
 ```
 
-## Configuration
+to create static site ready to host (/public).
 
- Edit the export object in `data/SiteConfig`:
+##### External services
 
- ```js
- module.exports = {
-     blogPostDir: "sample-posts", // The name of directory that contains your posts.
-     blogAuthorDir: "sample-authors", // The name of directory that contains your authors.
-     blogAuthorId: "casper", // The default and fallback author ID used for blog posts without a defined author.
-     siteTitle: "Gatsby Casper Starter", // Site title.
-     siteTitleAlt: "GatsbyJS Casper Theme Starter", // Alternative site title for SEO.
-     siteLogo: "/logos/logo-1024.png", // Logo used for SEO and manifest.
-     siteUrl: "https://haysclark.github.io", // Domain of your website without pathPrefix.
-     pathPrefix: "/gatsby-starter-casper", // Prefixes all links. For cases when deployed to example.github.io/gatsby-starter-casper/.
-     siteDescription: "A Casper themed GatsbyJS stater based on the Advanced Starter.", // Website description used for RSS feeds/meta description tag.
-     siteCover: "/images/blog-cover.jpg", // Optional, the cover image used in header for home page.
-     siteNavigation: true, // If navigation is enabled the Menu button will be visible
-     siteRss: "/rss.xml", // Path to the RSS file.
-     siteRssAuthor: "Casper User", // The author name used in the RSS file
-     // siteFBAppID: "1825356251115265", // optional, sets the FB Application ID for using app insights
-     sitePaginationLimit: 10, // The max number of posts per page.
-     googleAnalyticsID: "UA-111982167-1", // GA tracking ID.
-     siteSocialUrls: [
-       "https://github.com/haysclark/gatsby-starter-casper",
-       "https://twitter.com/gatsbyjs",
-       "mailto:gatsbyjs@example.com"
-     ],
-     postDefaultCategoryID: "Tech", // Default category for posts.
-     // Links to social profiles/projects you want to display in the navigation bar.
-     userLinks: [
-       {
-         label: "GitHub",
-         url: "https://github.com/haysclark/gatsby-starter-casper",
-         iconClassName: "fa fa-github" // Disabled, see Navigation.jsx
-       },
-       {
-         label: "Twitter",
-         url: "https://twitter.com/gatsbyjs",
-         iconClassName: "fa fa-twitter" // Disabled, see Navigation.jsx
-       },
-       {
-         label: "Email",
-         url: "mailto:gatsbyjs@example.com",
-         iconClassName: "fa fa-envelope" // Disabled, see Navigation.jsx
-       }
-     ],
-     // Copyright string for the footer of the website and RSS feed.
-     copyright: {
-       label: "Gatsby Casper Starter" // Label used before the year
-       // year: "2018" // optional, set specific copyright year or range of years, defaults to current year
-       // url: "https://www.gatsbyjs.org/" // optional, set link address of copyright, defaults to site root
-     },
-     themeColor: "#c62828", // Used for setting manifest and progress theme colors.
-     backgroundColor: "#e0e0e0", // Used for setting manifest background color.
-     promoteGatsby: true // Enables the GatsbyJS promotion information in footer.
-   };
- ```
+The starter uses external services for some functions: comments, searching, analytics. To use them you have to secure some access data. All services are free to use or have generous free tiers big enough for a personal blog.
 
- You can also optionally set `pathPrefix`:
- ```js
- module.exports = {
-  // Note: it must *not* have a trailing slash.
-       pathPrefix: '/gatsby-starter-casper', // Prefixes all links. For cases when deployed to example.github.io/gatsby-starter-casper/.
-}
+Create an `.env` file like below in the root folder. Change `...` placeholders with real data.
+<br />By default, your `.env` file will be ignored by git. Remove `.env` from `.gitignore` in order to be able to push the file to your repository.
 
- ```
+```text
+GOOGLE_ANALYTICS_ID=...
+ALGOLIA_APP_ID=...
+ALGOLIA_SEARCH_ONLY_API_KEY=...
+ALGOLIA_ADMIN_API_KEY=...
+ALGOLIA_INDEX_NAME=...
+FB_APP_ID=...
+```
 
- WARNING: Make sure to edit `static/robots.txt` to include your domain for the sitemap!
+### Instructions & tutorials
 
-## Content
+* [How to install, setup and add new content to a Blog starter](https://dev.greglobinski.com/install-blog-starter/)
+* [Setup Algolia account for your GatsbyJS blog](https://dev.greglobinski.com/setup-algolia-account/)
+* More articles at [Front-end web development with Greg](https://dev.greglobinski.com/)
 
-### Posts
+## Windows users
 
-Posts are authored using Markdown and include some optional YAML frontmatter data properties.  Each post should have a separate folder for the .md file in addition to any images or other media related to that post.  Posts are stored in a subfolder in the ```/content/``` directory; the target subfolder is set by the _blogPostDir_ property in _SiteConfig.js_.
+You should take a look at this: [Gatsby on Windows](https://www.gatsbyjs.org/docs/gatsby-on-windows/)
 
-### Authors
+## Authors
 
-Each post can reference the author of the post, if the author is not set the default author will be used; which is controlled by the _blogAuthorId_ property in _SiteConfig.js_.  All authors, including the default author (aka _blodAuthorId_) must have an author JSON file.  These JSON files MUST be stored in a folder names ```authors```, for Gatsby to parse them correctly.  The location of this ```authors``` folder can be controlled by the _blogAuthorDir_ property in _SiteConfig.js_. It IS possible to have the ```authors``` folder inside the  _blogPostDir_ folder.
+* Greg Lobinski [@greglobinski](https://github.com/greglobinski)
+
+See also the list of [contributors](https://github.com/greglobinski/gatsby-starter-personal-blog/graphs/contributors) who participated in this project.
 
 ## Contributing
 
-👍🎉 First off, thanks for taking the time to contribute! 🎉👍
+* Fork the repo
+* Create your feature branch (git checkout -b feature/fooBar)
+* Commit your changes (git commit -am 'Add some fooBar')
+* Push to the branch (git push origin feature/fooBar)
+* Create a new Pull Request
 
-The project uses [Conventional Commits](https://conventionalcommits.org/) which are simple and easy to follow. In general, use your best judgment, and feel free to propose changes by creating an issue and then mention the issue in your pull request.
+## Licence
 
-## License
+MIT License
 
-MIT
-# TwoDevs
+Copyright (c) 2017 gatsbyjs <br />Copyright (c) 2018 greg lobinski
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
