@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Seo from "../components/Seo";
+import SEO from "../components/SEO";
 import Article from "../components/Article";
 import Page from "../components/Page";
 import { ThemeContext } from "../layouts";
@@ -26,7 +26,7 @@ const PageTemplate = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo data={page} facebook={facebook} />
+      <SEO data={page} facebook={facebook} />
     </React.Fragment>
   );
 };

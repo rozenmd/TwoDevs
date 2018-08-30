@@ -5,7 +5,7 @@ import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
 import Contact from "../components/Contact";
 import Headline from "../components/Article/Headline";
-import Seo from "../components/Seo";
+import SEO from "../components/SEO";
 
 const ContactPage = props => {
   const {
@@ -29,7 +29,7 @@ const ContactPage = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <SEO facebook={facebook} />
     </React.Fragment>
   );
 };

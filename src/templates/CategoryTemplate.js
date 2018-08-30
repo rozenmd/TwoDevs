@@ -2,7 +2,7 @@ import FaTag from "react-icons/lib/fa/tag";
 import PropTypes from "prop-types";
 import React from "react";
 
-import Seo from "../components/Seo";
+import SEO from "../components/SEO";
 import { ThemeContext } from "../layouts";
 import Article from "../components/Article";
 import Headline from "../components/Article/Headline";
@@ -42,7 +42,7 @@ const CategoryTemplate = props => {
         )}
       </ThemeContext.Consumer>
 
-      <Seo facebook={facebook} />
+      <SEO facebook={facebook} />
     </React.Fragment>
   );
 };

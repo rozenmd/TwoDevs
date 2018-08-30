@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import config from "../../../content/meta/config";
 
-const Seo = props => {
+const SEO = props => {
   const { data, facebook } = props;
   const postTitle = ((data || {}).frontmatter || {}).title;
   const postDescription = ((data || {}).frontmatter || {}).description;
@@ -42,9 +42,9 @@ const Seo = props => {
   );
 };
 
-Seo.propTypes = {
+SEO.propTypes = {
   data: PropTypes.object,
   facebook: PropTypes.object.isRequired
 };
 
-export default Seo;
+export default SEO;
